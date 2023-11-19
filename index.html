@@ -1,2 +1,101 @@
-<h1>Under construction</h1>
-<p>Last update: 19.11.2023 - 11:30</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extension downloads</title>
+    <script defer type="module">
+        let firefoxDownloadLinkTableField = document.querySelector("#firefox-download-link");
+        let chromeDownloadLinkTableField = document.querySelector("#chrome-download-link");
+
+        let firefoxJson = await(await fetch("https://thselukas.github.io/update-firefox.json")).json();
+        let chromeXml = {};
+
+        let downloadsFirefox = firefoxJson["addons"]["extension@feuerwehr-wallern.at"]["updates"];
+
+        let version = "";
+        let downloadUrl = "";
+
+        for (let i = 0; i < downloadsFirefox.length; i++) {
+            if (version < downloadsFirefox[i]["version"]) {
+                version = downloadsFirefox[i]["version"];
+                downloadUrl = downloadsFirefox[i]["update_link"];
+            }
+        }
+
+        let firefoxDownloadLinkElement = document.createElement("a");
+        firefoxDownloadLinkElement.href = downloadUrl;
+        firefoxDownloadLinkElement.innerHTML = `Version: <b>${version}</b>`;
+
+        firefoxDownloadLinkTableField.appendChild(firefoxDownloadLinkElement);
+
+
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;700&family=Roboto:wght@300&display=swap');
+
+        body {
+            margin: 1rem;
+        }
+
+        table {
+            width: 50%;
+            border-collapse: collapse;
+        }
+
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        th {
+            text-align: left;
+        }
+
+        td {
+            text-align: center;
+        }
+
+
+        tr>* {
+            border: 1px solid black;
+        }
+
+        td,
+        th {
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Downloads</h1>
+    <table>
+        <tr>
+            <th>
+                <b>Browser</b>
+            </th>
+            <th>
+                Link
+            </th>
+        </tr>
+        <tr>
+            <td>
+                Firefox
+            </td>
+            <td id="firefox-download-link">
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Chrome
+            </td>
+            <td id="chrome-download-link">
+                <span style="color: red;"><b>Kein Download gefunden</b></span>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
